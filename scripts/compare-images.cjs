@@ -37,6 +37,10 @@ function compareImages(img1Path, img2Path, diffPath, threshold = 0.001) {
   }
 }
 
-// Ensure the baseline images exist or just create a script for future CI pipeline use
-console.log('Visual Regression Script Setup Complete.');
-console.log('In CI, use this script to compare actual vs baseline images.');
+const [, , img1Path, img2Path, diffPath, thresholdArg] = process.argv;
+if (img1Path && img2Path && diffPath) {
+  const threshold = thresholdArg ? Number(thresholdArg) : 0.001;
+  compareImages(img1Path, img2Path, diffPath, Number.isFinite(threshold) ? threshold : 0.001);
+} else {
+  console.log("Usage: node scripts/compare-images.cjs <img1> <img2> <diff> [threshold]");
+}
