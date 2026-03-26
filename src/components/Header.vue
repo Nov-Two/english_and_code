@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, type Component } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import { MagnifyingGlassIcon, BellIcon } from '@heroicons/vue/24/outline';
 import { ChevronDownIcon as ChevronDownIconMini } from '@heroicons/vue/20/solid';
 
@@ -22,7 +23,7 @@ interface IconConfig {
 }
 
 // 导航项配置
-const navLinks: NavLink[] = [{ label: 'Curriculum', hasDropdown: true }, { label: 'Community' }];
+const navLinks: NavLink[] = [{ label: 'Curriculum', href: '/curriculum' }, { label: 'Dashboard', href: '#' }, { label: 'Community', href: '#' }];
 
 // 图标配置（支持动态替换）
 const icons: IconConfig = {
@@ -32,13 +33,24 @@ const icons: IconConfig = {
 };
 
 const searchValue = ref('');
+const router = useRouter();
+const route = useRoute();
+
+const navigateTo = (path?: string) => {
+  if (path && path !== '#') {
+    router.push(path);
+  }
+};
 </script>
 
 <template>
   <a-layout-header class="header-nav">
     <!-- 左侧 Logo 与 搜索栏 -->
     <div class="header-left">
-      <div class="logo">
+      <div
+        class="logo"
+        @click="router.push('/')"
+      >
         LinguistCode
       </div>
 
@@ -89,7 +101,8 @@ const searchValue = ref('');
           v-for="link in navLinks"
           :key="link.label"
           class="nav-item"
-          :class="{ 'has-dropdown': link.hasDropdown }"
+          :class="{ 'has-dropdown': link.hasDropdown, 'active': route.path === link.href }"
+          @click="navigateTo(link.href)"
         >
           <span class="nav-label">{{ link.label }}</span>
           <component
@@ -240,14 +253,29 @@ const searchValue = ref('');
       cursor: pointer;
       color: #595959;
       transition: color 0.2s;
+      position: relative;
 
       &:hover {
         color: #198eee;
       }
 
+      &.active {
+        color: #198eee;
+        font-weight: 600;
+        
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: -22px;
+          left: 0;
+          width: 100%;
+          height: 2px;
+          background-color: #198eee;
+        }
+      }
+
       .nav-label {
         font-size: 14px;
-        font-weight: 500;
       }
 
       .icon-dropdown {

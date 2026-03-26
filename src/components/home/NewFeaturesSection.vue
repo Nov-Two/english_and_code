@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, shallowRef } from 'vue';
+import type { Component } from 'vue';
 import { LanguageIcon, RectangleStackIcon, BookOpenIcon } from '@heroicons/vue/24/outline';
 
 interface FeatureItem {
   title: string;
   description: string;
-  icon: any;
+  icon: Component;
   iconBgClass: string;
   iconColorClass: string;
 }
@@ -95,14 +96,20 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <section ref="sectionRef" class="w-full py-24 px-6 overflow-hidden">
+  <section
+    ref="sectionRef"
+    class="w-full py-24 px-6 overflow-hidden"
+  >
     <div class="w-full max-w-[1200px] mx-auto">
       <!-- Section Header -->
       <div
         class="text-center mb-16 transition-all duration-700 ease-out"
         :class="isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'"
       >
-        <a-typography-title :level="2" class="!text-4xl !font-bold !mb-4">
+        <a-typography-title
+          :level="2"
+          class="!text-4xl !font-bold !mb-4"
+        >
           {{ title }}
         </a-typography-title>
         <a-typography-paragraph class="!text-gray-600 !text-xl !leading-7 max-w-[800px] mx-auto">
@@ -115,7 +122,6 @@ onUnmounted(() => {
         <div
           v-for="(feature, index) in props.features"
           :key="index"
-          @click="handleCardClick(index)"
           class="relative rounded-xl p-8 shadow-sm transition-all duration-[800ms] ease-out staggered-card cursor-pointer overflow-hidden border-2"
           :class="[
             isVisible ? 'visible' : 'hidden-state',
@@ -127,12 +133,16 @@ onUnmounted(() => {
             transitionDelay: `${index * 150}ms`,
             willChange: 'transform, opacity',
           }"
+          @click="handleCardClick(index)"
         >
           <div
             class="mb-6 flex items-center justify-center w-12 h-12 rounded-lg transition-colors"
             :class="[feature.iconBgClass, feature.iconColorClass]"
           >
-            <component :is="feature.icon.value || feature.icon" class="w-7 h-7" />
+            <component
+              :is="feature.icon.value || feature.icon"
+              class="w-7 h-7"
+            />
           </div>
 
           <a-typography-title
@@ -148,15 +158,22 @@ onUnmounted(() => {
           </a-typography-paragraph>
 
           <!-- Feature Examples -->
-          <div v-if="index === 0" class="mt-6 space-y-3">
+          <div
+            v-if="index === 0"
+            class="mt-6 space-y-3"
+          >
             <div class="rounded-lg p-3 transition-colors bg-blue-50">
-              <div class="font-semibold text-sm transition-colors text-blue-600">Function</div>
+              <div class="font-semibold text-sm transition-colors text-blue-600">
+                Function
+              </div>
               <div class="text-sm transition-colors text-gray-600">
                 A reusable block of code tasks.
               </div>
             </div>
             <div class="rounded-lg p-3 transition-colors bg-purple-50">
-              <div class="font-semibold text-sm transition-colors text-purple-600">Boolean</div>
+              <div class="font-semibold text-sm transition-colors text-purple-600">
+                Boolean
+              </div>
               <div class="text-sm transition-colors text-gray-600">
                 A simple True or False value.
               </div>
@@ -167,7 +184,9 @@ onUnmounted(() => {
             v-if="index === 1"
             class="mt-6 rounded-lg p-4 transition-colors bg-gradient-to-br from-blue-500 to-purple-600"
           >
-            <div class="text-white font-semibold mb-3">Chapter 1 Vocabulary</div>
+            <div class="text-white font-semibold mb-3">
+              Chapter 1 Vocabulary
+            </div>
             <div class="space-y-2">
               <div class="flex justify-between text-white">
                 <span class="text-sm">Syntax</span>
@@ -184,7 +203,10 @@ onUnmounted(() => {
             </div>
           </div>
 
-          <div v-if="index === 2" class="mt-6">
+          <div
+            v-if="index === 2"
+            class="mt-6"
+          >
             <div class="rounded-lg p-4 space-y-3 transition-colors bg-gray-100">
               <div class="h-2 rounded transition-colors bg-gray-200" />
               <div class="h-2 rounded w-3/4 transition-colors bg-gray-200" />

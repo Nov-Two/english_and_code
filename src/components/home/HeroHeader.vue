@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useRouter } from 'vue-router';
+
 interface Props {
   badgeText?: string;
   titleStart?: string;
@@ -17,6 +19,12 @@ withDefaults(defineProps<Props>(), {
   primaryButtonText: 'Start Learning Free',
   secondaryButtonText: 'Explore Curriculum',
 });
+
+const router = useRouter();
+
+const navigateToCurriculum = () => {
+  router.push('/curriculum');
+};
 </script>
 
 <template>
@@ -29,7 +37,10 @@ withDefaults(defineProps<Props>(), {
     </div>
 
     <slot name="title">
-      <transition appear name="fade-slide-up-1">
+      <transition
+        appear
+        name="fade-slide-up-1"
+      >
         <a-typography-title
           :level="1"
           class="!text-[56px] md:!text-[72px] !leading-[64px] md:!leading-[80px] !font-bold text-center !mb-6 font-bold max-w-[800px]"
@@ -42,7 +53,10 @@ withDefaults(defineProps<Props>(), {
 
     <div class="flex flex-col items-center pb-12 px-3">
       <slot name="description">
-        <transition appear name="fade-slide-up-2">
+        <transition
+          appear
+          name="fade-slide-up-2"
+        >
           <a-typography-paragraph
             class="!text-gray-600 !text-xl !leading-7 text-center whitespace-pre-line"
           >
@@ -53,8 +67,14 @@ withDefaults(defineProps<Props>(), {
     </div>
 
     <slot name="actions">
-      <transition appear name="fade-slide-up-3">
-        <a-space size="large" class="mb-16 flex-col md:flex-row w-full md:w-auto justify-center">
+      <transition
+        appear
+        name="fade-slide-up-3"
+      >
+        <a-space
+          size="large"
+          class="mb-16 flex-col md:flex-row w-full md:w-auto justify-center"
+        >
           <a-button
             type="primary"
             size="large"
@@ -65,6 +85,7 @@ withDefaults(defineProps<Props>(), {
           <a-button
             size="large"
             class="!h-[56px] !px-8 !rounded-lg !border-gray-400 !text-blue-600 hover:!bg-gray-50"
+            @click="navigateToCurriculum"
           >
             <span class="text-base font-semibold">{{ secondaryButtonText }}</span>
           </a-button>

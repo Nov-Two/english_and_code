@@ -53,7 +53,7 @@ const pause = () => {
 };
 
 const reset = () => {
-  if (timer) clearTimeout(timer);
+  if (timer) {clearTimeout(timer);}
   timer = null;
   stage.value = 'idle';
   displayedChars.value = [];
@@ -92,24 +92,44 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  if (timer) clearTimeout(timer);
+  if (timer) {clearTimeout(timer);}
 });
 
 defineExpose({ play, pause, reset });
 </script>
 
 <template>
-  <div class="text-wrapper" :class="`stage-${stage}`">
+  <div
+    class="text-wrapper"
+    :class="`stage-${stage}`"
+  >
     <!-- Stage 1: Typing -->
-    <div v-if="stage === 'typing' || stage === 'idle'" class="typing-container">
-      <transition-group name="typewriter" tag="span" class="text-content">
-        <span v-for="(char, index) in displayedChars" :key="index" class="char">{{ char }}</span>
+    <div
+      v-if="stage === 'typing' || stage === 'idle'"
+      class="typing-container"
+    >
+      <transition-group
+        name="typewriter"
+        tag="span"
+        class="text-content"
+      >
+        <span
+          v-for="(char, index) in displayedChars"
+          :key="index"
+          class="char"
+        >{{ char }}</span>
       </transition-group>
-      <span class="cursor" v-show="stage === 'typing'"></span>
+      <span
+        v-show="stage === 'typing'"
+        class="cursor"
+      />
     </div>
 
     <!-- Stage 3: Done -->
-    <div v-else-if="stage === 'done'" class="done-container">
+    <div
+      v-else-if="stage === 'done'"
+      class="done-container"
+    >
       <span>{{ text }}</span>
     </div>
   </div>
