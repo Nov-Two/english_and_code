@@ -1,8 +1,13 @@
 <script setup lang="ts">
+import { ref, onMounted, onUnmounted, shallowRef } from 'vue';
+import { LanguageIcon, RectangleStackIcon, BookOpenIcon } from '@heroicons/vue/24/outline';
+
 interface FeatureItem {
   title: string;
   description: string;
-  icon: string;
+  icon: any;
+  iconBgClass: string;
+  iconColorClass: string;
 }
 
 interface Props {
@@ -11,38 +16,93 @@ interface Props {
   features?: FeatureItem[];
 }
 
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   title: 'The LexiCode Experience',
-  subtitle: 'Designed for clarity, built for retention. Experience a learning environment that understands your needs.',
+  subtitle:
+    'Designed for clarity, built for retention. Experience a learning environment that understands your needs.',
   features: () => [
     {
       title: 'Smart Word Tooltips',
-      description: 'Never break your flow to search for a word. Hover over any technical term to see simplified definitions, phonetics, and native translations.',
-      icon: '/image/mn72gmka-x86drgu.svg'
+      description:
+        'Never break your flow to search for a word. Hover over any technical term to see simplified definitions, phonetics, and native translations.',
+      icon: shallowRef(LanguageIcon),
+      iconBgClass: 'bg-blue-50',
+      iconColorClass: 'text-blue-500',
     },
     {
       title: 'Module Word Cards',
-      description: 'Master the core vocabulary before you dive into the code. Each chapter starts with a curated list of essential terms you\'ll encounter.',
-      icon: '/image/mn72gmka-8qqute0.svg'
+      description:
+        "Master the core vocabulary before you dive into the code. Each chapter starts with a curated list of essential terms you'll encounter.",
+      icon: shallowRef(RectangleStackIcon),
+      iconBgClass: 'bg-blue-50',
+      iconColorClass: 'text-blue-500',
     },
     {
       title: 'Editorial Reading',
-      description: 'Learning code shouldn\'t feel like reading a manual. Our layout feels like a premium digital magazine, optimized for focus and reading pleasure.',
-      icon: '/image/mn72gmka-joa71xo.svg'
-    }
-  ]
+      description:
+        "Learning code shouldn't feel like reading a manual. Our layout feels like a premium digital magazine, optimized for focus and reading pleasure.",
+      icon: shallowRef(BookOpenIcon),
+      iconBgClass: 'bg-orange-50',
+      iconColorClass: 'text-orange-500',
+    },
+  ],
+});
+
+const sectionRef = ref<HTMLElement | null>(null);
+const isVisible = ref(false);
+const activeCardIndex = ref<number | null>(null);
+
+const handleCardClick = (index: number) => {
+  activeCardIndex.value = index;
+};
+
+let observer: IntersectionObserver | null = null;
+
+onMounted(() => {
+  if (!('IntersectionObserver' in window)) {
+    // Fallback for browsers that don't support IntersectionObserver
+    isVisible.value = true;
+    return;
+  }
+
+  observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          isVisible.value = true;
+          // Once visible, we can stop observing
+          if (sectionRef.value) {
+            observer?.unobserve(sectionRef.value);
+          }
+        }
+      });
+    },
+    {
+      threshold: 0.1, // Trigger when 10% of the section is visible
+    },
+  );
+
+  if (sectionRef.value) {
+    observer.observe(sectionRef.value);
+  }
+});
+
+onUnmounted(() => {
+  if (observer) {
+    observer.disconnect();
+  }
 });
 </script>
 
 <template>
-  <section class="w-full py-24 px-6">
+  <section ref="sectionRef" class="w-full py-24 px-6 overflow-hidden">
     <div class="w-full max-w-[1200px] mx-auto">
       <!-- Section Header -->
-      <div class="text-center mb-16">
-        <a-typography-title
-          :level="2"
-          class="!text-4xl !font-bold !mb-4"
-        >
+      <div
+        class="text-center mb-16 transition-all duration-700 ease-out"
+        :class="isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'"
+      >
+        <a-typography-title :level="2" class="!text-4xl !font-bold !mb-4">
           {{ title }}
         </a-typography-title>
         <a-typography-paragraph class="!text-gray-600 !text-xl !leading-7 max-w-[800px] mx-auto">
@@ -53,47 +113,51 @@ withDefaults(defineProps<Props>(), {
       <!-- Features Grid -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div
-          v-for="(feature, index) in features"
+          v-for="(feature, index) in props.features"
           :key="index"
-          class="bg-white rounded-xl p-8 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+          @click="handleCardClick(index)"
+          class="relative rounded-xl p-8 shadow-sm transition-all duration-[800ms] ease-out staggered-card cursor-pointer overflow-hidden border-2"
+          :class="[
+            isVisible ? 'visible' : 'hidden-state',
+            activeCardIndex === index
+              ? 'bg-white border-blue-500 shadow-xl -translate-y-2'
+              : 'bg-white border-transparent hover:shadow-lg hover:-translate-y-1 hover:border-blue-200',
+          ]"
+          :style="{
+            transitionDelay: `${index * 150}ms`,
+            willChange: 'transform, opacity',
+          }"
         >
-          <div class="mb-6">
-            <img
-              :src="feature.icon"
-              :alt="feature.title"
-              class="w-16 h-16"
-            >
+          <div
+            class="mb-6 flex items-center justify-center w-12 h-12 rounded-lg transition-colors"
+            :class="[feature.iconBgClass, feature.iconColorClass]"
+          >
+            <component :is="feature.icon.value || feature.icon" class="w-7 h-7" />
           </div>
-          
+
           <a-typography-title
             :level="3"
-            class="!text-xl !font-bold !mb-4"
+            class="!text-xl !font-bold !mb-4 transition-colors"
+            :class="activeCardIndex === index ? '!text-blue-600' : '!text-gray-900'"
           >
             {{ feature.title }}
           </a-typography-title>
-          
-          <a-typography-paragraph class="!text-gray-600 !leading-6">
+
+          <a-typography-paragraph class="!leading-6 transition-colors !text-gray-600">
             {{ feature.description }}
           </a-typography-paragraph>
 
           <!-- Feature Examples -->
-          <div
-            v-if="index === 0"
-            class="mt-6 space-y-3"
-          >
-            <div class="bg-blue-50 rounded-lg p-3">
-              <div class="text-blue-600 font-semibold text-sm">
-                Function
-              </div>
-              <div class="text-gray-600 text-sm">
+          <div v-if="index === 0" class="mt-6 space-y-3">
+            <div class="rounded-lg p-3 transition-colors bg-blue-50">
+              <div class="font-semibold text-sm transition-colors text-blue-600">Function</div>
+              <div class="text-sm transition-colors text-gray-600">
                 A reusable block of code tasks.
               </div>
             </div>
-            <div class="bg-purple-50 rounded-lg p-3">
-              <div class="text-purple-600 font-semibold text-sm">
-                Boolean
-              </div>
-              <div class="text-gray-600 text-sm">
+            <div class="rounded-lg p-3 transition-colors bg-purple-50">
+              <div class="font-semibold text-sm transition-colors text-purple-600">Boolean</div>
+              <div class="text-sm transition-colors text-gray-600">
                 A simple True or False value.
               </div>
             </div>
@@ -101,11 +165,9 @@ withDefaults(defineProps<Props>(), {
 
           <div
             v-if="index === 1"
-            class="mt-6 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg p-4"
+            class="mt-6 rounded-lg p-4 transition-colors bg-gradient-to-br from-blue-500 to-purple-600"
           >
-            <div class="text-white font-semibold mb-3">
-              Chapter 1 Vocabulary
-            </div>
+            <div class="text-white font-semibold mb-3">Chapter 1 Vocabulary</div>
             <div class="space-y-2">
               <div class="flex justify-between text-white">
                 <span class="text-sm">Syntax</span>
@@ -122,14 +184,11 @@ withDefaults(defineProps<Props>(), {
             </div>
           </div>
 
-          <div
-            v-if="index === 2"
-            class="mt-6"
-          >
-            <div class="bg-gray-100 rounded-lg p-4 space-y-3">
-              <div class="h-2 bg-gray-200 rounded" />
-              <div class="h-2 bg-gray-200 rounded w-3/4" />
-              <div class="h-2 bg-gray-200 rounded w-1/2" />
+          <div v-if="index === 2" class="mt-6">
+            <div class="rounded-lg p-4 space-y-3 transition-colors bg-gray-100">
+              <div class="h-2 rounded transition-colors bg-gray-200" />
+              <div class="h-2 rounded w-3/4 transition-colors bg-gray-200" />
+              <div class="h-2 rounded w-1/2 transition-colors bg-gray-200" />
             </div>
           </div>
         </div>
@@ -139,5 +198,13 @@ withDefaults(defineProps<Props>(), {
 </template>
 
 <style scoped>
-/* Additional styling if needed */
+.staggered-card.hidden-state {
+  opacity: 0;
+  transform: translateY(50px);
+}
+
+.staggered-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
 </style>

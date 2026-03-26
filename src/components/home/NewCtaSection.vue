@@ -57,7 +57,7 @@ withDefaults(defineProps<Props>(), {
             <a-button
               type="primary"
               size="large"
-              class="!h-[56px] !px-10 !rounded-lg !bg-white hover:!bg-gray-50 !border-none w-full sm:w-auto"
+              class="!h-[56px] !px-10 !rounded-lg !bg-white hover:!bg-gray-50 !border-none w-full sm:w-auto btn-shimmer"
             >
               <span
                 class="text-blue-600 text-base font-semibold"
@@ -79,5 +79,27 @@ withDefaults(defineProps<Props>(), {
 </template>
 
 <style scoped>
-/* Additional styling if needed */
+.btn-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(to right, transparent, rgba(37, 99, 235, 0.2), transparent);
+  transform: skewX(-20deg);
+  animation: shimmer 3s infinite;
+  pointer-events: none;
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  20% { left: 200%; }
+  100% { left: 200%; }
+}
 </style>

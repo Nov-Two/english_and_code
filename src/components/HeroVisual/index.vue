@@ -215,9 +215,7 @@ watch(
                     </p>
                   </div>
                 </template>
-                <span
-                  class="text-[#2563EB] font-bold cursor-pointer border-b-2 border-dashed border-[#2563EB]/40 pb-[1px] hover:border-[#2563EB] transition-colors"
-                >
+                <span class="text-[#2563EB] font-bold cursor-pointer border-b-2 border-dashed border-[#2563EB]/40 pb-[1px] hover:border-[#2563EB] transition-colors tooltip-pulse-animate">
                   {{ currentContent.tooltipWord }}
                 </span>
               </Popover>
@@ -352,11 +350,29 @@ watch(
 
 :deep(.custom-tooltip .ant-popover-inner) {
   border-radius: 12px;
-  box-shadow:
-    0 10px 25px -5px rgba(0, 0, 0, 0.1),
-    0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
   padding: 0;
   overflow: hidden;
   border: 1px solid #f3f4f6;
+}
+
+.tooltip-pulse-animate {
+  animation: gentle-pulse 2s infinite;
+  display: inline-block;
+}
+
+@keyframes gentle-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 </style>
