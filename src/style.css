@@ -1,12 +1,12 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Liberation+Mono:wght@400;700&family=Public+Sans:wght@400;700&family=Space+Grotesk:wght@400;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Liberation+Mono:wght@400;700&family=Public+Sans:wght@400;700&family=Space+Grotesk:wght@400;700&display=swap');
 
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
-  --font-public-sans: "Public Sans", sans-serif;
-  --font-space-grotesk: "Space Grotesk", sans-serif;
-  --font-liberation-mono: "Liberation Mono", monospace;
-  --font-inter: "Inter", sans-serif;
+  --font-public-sans: 'Public Sans', sans-serif;
+  --font-space-grotesk: 'Space Grotesk', sans-serif;
+  --font-liberation-mono: 'Liberation Mono', monospace;
+  --font-inter: 'Inter', sans-serif;
 
   --color-primary: #005ea3;
   --color-primary-dark: #004d86;
@@ -25,8 +25,7 @@
 }
 
 :root {
-  font-family:
-    "Public Sans", Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Public Sans', Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -42,8 +41,6 @@
 
 * {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
 }
 
 body {

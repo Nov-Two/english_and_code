@@ -1,5 +1,6 @@
 <script setup lang="ts">
 interface Props {
+  badgeText?: string;
   titleStart?: string;
   titleHighlight?: string;
   description?: string;
@@ -8,30 +9,39 @@ interface Props {
 }
 
 withDefaults(defineProps<Props>(), {
-  titleStart: 'Code in',
+  badgeText: 'New: AI-Powered Definitions',
+  titleStart: 'Master Code through',
   titleHighlight: 'Simple English',
-  description: 'Learn to code without being held back by complex vocabulary. We use\nsimple words and provide instant help for difficult terms.',
-  primaryButtonText: 'Get Started for Free',
-  secondaryButtonText: 'View Curriculum'
+  description:
+    'Learn programming without the jargon barrier. We use editorial-grade\nEnglish and provide instant translations for complex concepts.',
+  primaryButtonText: 'Start Learning Free',
+  secondaryButtonText: 'Explore Curriculum',
 });
 </script>
 
 <template>
-  <div class="w-full flex flex-col items-center w-full px-6 pt-32">
+  <div class="w-full flex flex-col items-center w-full px-6 pt-24 pb-16">
+    <div class="mb-8">
+      <div class="inline-flex items-center bg-blue-50 rounded-full px-4 py-2">
+        <div class="w-2 h-2 bg-blue-600 rounded-full mr-2" />
+        <span class="text-blue-600 text-sm font-medium">{{ badgeText }}</span>
+      </div>
+    </div>
+
     <slot name="title">
       <a-typography-title
         :level="1"
-        class="!text-[48px] md:!text-[72px] !leading-[56px] md:!leading-[72px] !font-bold text-center !mb-6 font-[family-name:var(--font-space-grotesk)] max-w-[896px]"
+        class="!text-[56px] md:!text-[72px] !leading-[64px] md:!leading-[80px] !font-bold text-center !mb-6 font-bold max-w-[800px]"
       >
-        <span class="text-text-main tracking-[-3.6px]">{{ titleStart }}&nbsp;</span>
-        <span class="text-primary">{{ titleHighlight }}</span>
+        <span class="text-gray-900">{{ titleStart }}&nbsp;</span>
+        <span class="text-blue-600">{{ titleHighlight }}</span>
       </a-typography-title>
     </slot>
 
-    <div class="flex flex-col items-center max-w-[672px] pb-10 px-3">
+    <div class="flex flex-col items-center max-w-[600px] pb-12 px-3">
       <slot name="description">
         <a-typography-paragraph
-          class="text-center text-text-secondary text-xl leading-7 font-[family-name:var(--font-public-sans)] whitespace-pre-line"
+          class="!text-gray-600 !text-xl !leading-7 text-center whitespace-pre-line"
         >
           {{ description }}
         </a-typography-paragraph>
@@ -39,23 +49,19 @@ withDefaults(defineProps<Props>(), {
     </div>
 
     <slot name="actions">
-      <a-space
-        size="middle"
-        class="mb-20 flex-col md:flex-row w-full md:w-auto justify-center"
-      >
+      <a-space size="large" class="mb-16 flex-col md:flex-row w-full md:w-auto justify-center">
         <a-button
           type="primary"
           size="large"
-          class="!h-[60px] !px-8 !rounded !bg-gradient-to-br !from-primary !to-secondary !border-none !shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1)] w-full md:w-auto"
+          class="!h-[56px] !px-8 !rounded-lg !bg-blue-600 !border-blue-600 !shadow-lg"
         >
-          <span class="text-white text-base font-bold font-[family-name:var(--font-public-sans)]">{{ primaryButtonText
-          }}</span>
+          <span class="text-white text-base font-semibold">{{ primaryButtonText }}</span>
         </a-button>
         <a-button
           size="large"
-          class="!h-[60px] !px-8 !rounded !border-[#707784] !text-primary hover:!bg-slate-50 w-full md:w-auto"
+          class="!h-[56px] !px-8 !rounded-lg !border-gray-400 !text-blue-600 hover:!bg-gray-50"
         >
-          <span class="text-base font-bold font-[family-name:var(--font-public-sans)]">{{ secondaryButtonText }}</span>
+          <span class="text-base font-semibold">{{ secondaryButtonText }}</span>
         </a-button>
       </a-space>
     </slot>

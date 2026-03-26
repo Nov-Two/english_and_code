@@ -1,33 +1,32 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import type { HeroVisualProps } from "./types";
+import { ref } from 'vue';
+import type { HeroVisualProps } from './types';
 
 defineOptions({
-  name: "HeroVisual",
+  name: 'HeroVisual',
 });
 
 const props = withDefaults(defineProps<HeroVisualProps>(), {
-  moduleTitle: "Python Basics",
-  moduleSubtitle: "Module 1: Syntax",
+  moduleTitle: 'Python Basics',
+  moduleSubtitle: 'Module 1: Syntax',
   sidebarItems: () => [
     {
-      key: "intro",
-      icon: "/image/mn4q93o1-2fup0un.svg",
-      title: "Introduction",
+      key: 'intro',
+      icon: '/image/mn4q93o1-2fup0un.svg',
+      title: 'Introduction',
     },
-    { key: "vars", icon: "/image/mn4q93o1-rhdh26t.svg", title: "Variables" },
-    { key: "types", icon: "/image/mn4q93o1-b9yff4d.svg", title: "Data Types" },
+    { key: 'vars', icon: '/image/mn4q93o1-rhdh26t.svg', title: 'Variables' },
+    { key: 'types', icon: '/image/mn4q93o1-b9yff4d.svg', title: 'Data Types' },
   ],
-  activeSidebarKey: "intro",
-  lessonTitle: "Lesson 1: What is a Variable?",
+  activeSidebarKey: 'intro',
+  lessonTitle: 'Lesson 1: What is a Variable?',
   codeSnippets: () => [
-    { key: "user_name", value: '"Alex"', isString: true },
-    { key: "user_age", value: 25, isString: false },
+    { key: 'user_name', value: '"Alex"', isString: true },
+    { key: 'user_age', value: 25, isString: false },
   ],
-  tooltipTitle: "Container",
-  tooltipTag: "Noun",
-  tooltipDescription:
-    "A box or item that holds things\ninside it. In code, it holds data.",
+  tooltipTitle: 'Container',
+  tooltipTag: 'Noun',
+  tooltipDescription: 'A box or item that holds things\ninside it. In code, it holds data.',
 });
 
 const selectedKeys = ref<string[]>([props.activeSidebarKey]);
@@ -55,31 +54,23 @@ const handleUpgrade = () => {
         :xl="20"
         :xxl="16"
       >
-        <a-layout class="hero-layout">
-          <!-- Sidebar -->
-          <a-layout-sider
-            breakpoint="md"
-            collapsed-width="0"
-            :width="256"
-            class="hero-sider"
-            theme="light"
+        <div class="hero-layout flex">
+          <div
+            class="hero-sider hidden md:flex"
+            style="width: 256px; min-width: 256px; max-width: 256px"
           >
             <div class="sider-header">
               <a-typography-title
                 :level="4"
                 class="sider-title"
               >
-                {{
-                  moduleTitle
-                }}
+                {{ props.moduleTitle }}
               </a-typography-title>
               <a-typography-text
                 type="secondary"
                 class="sider-subtitle"
               >
-                {{
-                  moduleSubtitle
-                }}
+                {{ props.moduleSubtitle }}
               </a-typography-text>
             </div>
 
@@ -90,7 +81,7 @@ const handleUpgrade = () => {
               :style="{ borderRight: 'none' }"
             >
               <a-menu-item
-                v-for="item in sidebarItems"
+                v-for="item in props.sidebarItems"
                 :key="item.key"
                 class="hero-menu-item"
               >
@@ -117,10 +108,9 @@ const handleUpgrade = () => {
                 Upgrade to Pro
               </a-button>
             </div>
-          </a-layout-sider>
+          </div>
 
-          <!-- Main Content -->
-          <a-layout-content class="hero-content">
+          <div class="hero-content flex-1">
             <a-card
               :bordered="false"
               class="lesson-card"
@@ -129,9 +119,7 @@ const handleUpgrade = () => {
                 :level="2"
                 class="lesson-title"
               >
-                {{
-                  lessonTitle
-                }}
+                {{ props.lessonTitle }}
               </a-typography-title>
 
               <div class="lesson-description">
@@ -150,26 +138,27 @@ const handleUpgrade = () => {
                     <template #content>
                       <div class="tooltip-content">
                         <div class="tooltip-header">
-                          <span class="tooltip-title">{{ tooltipTitle }}</span>
+                          <span class="tooltip-title">
+                            {{ props.tooltipTitle }}
+                          </span>
                           <a-tag
                             color="#fde68a"
                             class="tooltip-tag"
                           >
-                            {{
-                              tooltipTag
-                            }}
+                            {{ props.tooltipTag }}
                           </a-tag>
                         </div>
                         <p class="tooltip-desc">
-                          {{ tooltipDescription }}
+                          {{ props.tooltipDescription }}
                         </p>
                       </div>
                     </template>
-                    <span class="highlight-word">container</span>
+                    <span class="highlight-word">
+                      container
+                    </span>
                   </a-popover>
                   <a-typography-text>
-                    . You can store information inside it
-                    and
+                    . You can store information inside it and
                   </a-typography-text>
                 </a-space>
                 <div class="mt-1">
@@ -187,7 +176,7 @@ const handleUpgrade = () => {
                 </div>
                 <div class="code-lines">
                   <div
-                    v-for="(snippet, index) in codeSnippets"
+                    v-for="(snippet, index) in props.codeSnippets"
                     :key="index"
                     class="code-line"
                   >
@@ -205,8 +194,8 @@ const handleUpgrade = () => {
                 </div>
               </div>
             </a-card>
-          </a-layout-content>
-        </a-layout>
+          </div>
+        </div>
       </a-col>
     </a-row>
   </div>
@@ -302,6 +291,7 @@ const handleUpgrade = () => {
 .hero-content {
   background: #f8fafc;
   padding: 32px;
+  min-width: 0;
 }
 
 .lesson-card {
@@ -394,7 +384,6 @@ const handleUpgrade = () => {
   margin-top: 8px;
 }
 
-/* Custom Popover Styles */
 :deep(.custom-popover .ant-popover-inner) {
   padding: 12px 16px;
   border-top: 3px solid #d97706;

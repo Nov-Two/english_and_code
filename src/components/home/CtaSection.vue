@@ -65,8 +65,7 @@ withDefaults(defineProps<Props>(), {
           >
             <span
               class="text-primary text-base font-bold font-[family-name:var(--font-public-sans)]"
-              >{{ primaryButtonText }}</span
-            >
+            >{{ primaryButtonText }}</span>
           </a-button>
           <a-button
             size="large"

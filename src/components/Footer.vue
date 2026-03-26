@@ -1,35 +1,82 @@
 <script setup lang="ts">
+import FooterLogo from './footer/FooterLogo.vue';
+import FooterColumn from './footer/FooterColumn.vue';
+import FooterBottom from './footer/FooterBottom.vue';
+
+interface FooterLink {
+  label: string;
+  href: string;
+}
+
+interface FooterColumnData {
+  title: string;
+  links: FooterLink[];
+}
+
+const footerColumns: FooterColumnData[] = [
+  {
+    title: 'Platform',
+    links: [
+      { label: 'Courses', href: '#' },
+      { label: 'Curriculum', href: '#' },
+      { label: 'Pricing', href: '#' },
+    ],
+  },
+  {
+    title: 'Support',
+    links: [
+      { label: 'Help Center', href: '#' },
+      { label: 'Community', href: '#' },
+      { label: 'API Status', href: '#' },
+    ],
+  },
+  {
+    title: 'Company',
+    links: [
+      { label: 'About', href: '#' },
+      { label: 'Careers', href: '#' },
+      { label: 'Privacy', href: '#' },
+    ],
+  },
+];
 </script>
 
 <template>
-  <a-layout-footer class="!bg-white !px-8 !py-12 !border-t !border-border/50 flex flex-col md:flex-row md:items-center justify-between gap-6 md:gap-0 w-full">
-    <div class="inline-flex flex-col flex-shrink-0 items-start gap-2">
-      <div class="flex flex-col flex-shrink-0 items-start self-stretch">
-        <span class="flex flex-shrink-0 items-center h-7 leading-7 tracking-[0px] text-blue-accent font-[family-name:var(--font-space-grotesk)] text-xl font-bold">
-          LinguistCode
-        </span>
+  <a-layout-footer class="!bg-white !border-t !border-[#f0f0f0] w-full flex justify-center">
+    <div class="w-full max-w-[1280px] px-[32px] py-[64px] flex flex-col gap-[64px]">
+      <!-- Main Content -->
+      <div class="flex flex-col md:flex-row justify-between items-start gap-[64px] md:gap-0">
+        <!-- Logo & Description -->
+        <FooterLogo />
+
+        <!-- Navigation Links -->
+        <div
+          class="flex flex-wrap sm:flex-nowrap gap-[64px] sm:gap-0 sm:space-x-[64px] lg:space-x-[75px] pr-[6px]"
+        >
+          <FooterColumn
+            v-for="(column, index) in footerColumns"
+            :key="column.title"
+            :title="column.title"
+            :links="column.links"
+            :class="{
+              'sm:!ml-0': index === 0,
+              'sm:!ml-[64px]': index === 1,
+              'sm:!ml-[75px]': index === 2,
+            }"
+          />
+        </div>
       </div>
-      <p class="flex flex-shrink-0 items-center h-4 leading-4 tracking-[1.2px] text-text-muted font-[family-name:var(--font-public-sans)] text-xs uppercase m-0">
-        © 2024 LinguistCode. Editorial English for Engineers.
-      </p>
-    </div>
-    
-    <div class="inline-flex flex-shrink-0 items-start justify-start md:justify-center gap-4 md:gap-8 flex-wrap">
-      <span class="flex flex-shrink-0 items-center h-4 leading-4 tracking-[1.2px] text-text-muted font-[family-name:var(--font-public-sans)] text-xs uppercase cursor-pointer transition-colors duration-300 hover:text-blue-accent">
-        Privacy Policy
-      </span>
-      <span class="flex flex-shrink-0 items-center h-4 leading-4 tracking-[1.2px] text-text-muted font-[family-name:var(--font-public-sans)] text-xs uppercase cursor-pointer transition-colors duration-300 hover:text-blue-accent">
-        Terms of Service
-      </span>
-      <span class="flex flex-shrink-0 items-center h-4 leading-4 tracking-[1.2px] text-text-muted font-[family-name:var(--font-public-sans)] text-xs uppercase cursor-pointer transition-colors duration-300 hover:text-blue-accent">
-        Help Center
-      </span>
-      <span class="flex flex-shrink-0 items-center h-4 leading-4 tracking-[1.2px] text-text-muted font-[family-name:var(--font-public-sans)] text-xs uppercase cursor-pointer transition-colors duration-300 hover:text-blue-accent">
-        Feedback
-      </span>
+
+      <!-- Bottom Bar -->
+      <FooterBottom />
     </div>
   </a-layout-footer>
 </template>
 
 <style scoped>
+/* Ant Design Layout Footer usually has some default padding/background that we override with Tailwind */
+:deep(.ant-layout-footer) {
+  background: transparent;
+  /* padding: 64px 32px; */
+}
 </style>
