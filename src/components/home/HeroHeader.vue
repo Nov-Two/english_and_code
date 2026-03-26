@@ -38,7 +38,7 @@ withDefaults(defineProps<Props>(), {
       </a-typography-title>
     </slot>
 
-    <div class="flex flex-col items-center max-w-[600px] pb-12 px-3">
+    <div class="flex flex-col items-center pb-12 px-3">
       <slot name="description">
         <a-typography-paragraph
           class="!text-gray-600 !text-xl !leading-7 text-center whitespace-pre-line"
@@ -49,7 +49,10 @@ withDefaults(defineProps<Props>(), {
     </div>
 
     <slot name="actions">
-      <a-space size="large" class="mb-16 flex-col md:flex-row w-full md:w-auto justify-center">
+      <a-space
+        size="large"
+        class="mb-16 flex-col md:flex-row w-full md:w-auto justify-center"
+      >
         <a-button
           type="primary"
           size="large"
