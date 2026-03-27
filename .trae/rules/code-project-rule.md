@@ -204,7 +204,7 @@ export function useUserList(options: UseUserListOptions = {}) {
   <div class="user-management-page">
     <UserFilter @filter="fetchUsers" />
 
-    <Table
+    <a-table
       :columns="columns"
       :data-source="userList"
       :loading="loading"
@@ -213,16 +213,16 @@ export function useUserList(options: UseUserListOptions = {}) {
     >
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'action'">
-          <Button type="primary" size="small" @click="handleEdit(record)"> Edit </Button>
+          <a-button type="primary" size="small" @click="handleEdit(record)"> Edit </a-button>
         </template>
       </template>
-    </Table>
+    </a-table>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted } from 'vue';
-import { Button, Table, message } from 'ant-design-vue';
+import { message } from 'ant-design-vue';
 import type { ColumnsType } from 'ant-design-vue/es/table';
 
 // 引入本地私有组件或 Composable (Feature Colocation)

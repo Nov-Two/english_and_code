@@ -3,7 +3,6 @@ import { ref, onMounted } from 'vue';
 import DefaultLayout from '@/layouts/DefaultLayout.vue';
 import RecommendedTracks from './components/RecommendedTracks.vue';
 import ExploreCourses from './components/ExploreCourses.vue';
-import { Alert, Spin } from 'ant-design-vue';
 
 const loading = ref(true);
 const error = ref<string | null>(null);
@@ -34,44 +33,28 @@ onMounted(() => {
   <DefaultLayout>
     <main class="w-full max-w-[1280px] mx-auto py-12 px-6 min-h-[calc(100vh-67px-300px)]">
       <!-- Loading State -->
-      <div
-        v-if="loading"
-        class="flex flex-col items-center justify-center py-32 space-y-4"
-      >
-        <Spin size="large" />
-        <p class="text-gray-500 font-medium">
-          Loading curriculum...
-        </p>
+      <div v-if="loading" class="flex flex-col items-center justify-center py-32 space-y-4">
+        <a-spin size="large" />
+        <p class="text-gray-500 font-medium">Loading curriculum...</p>
       </div>
-      
+
       <!-- Error State -->
-      <div
-        v-else-if="error"
-        class="py-32 flex justify-center"
-      >
-        <Alert
+      <div v-else-if="error" class="py-32 flex justify-center">
+        <a-alert
           type="error"
           show-icon
           :message="error"
           class="max-w-md w-full"
+          description="We're having trouble connecting. Please check your connection and try again."
         >
           <template #action>
-            <a-button
-              size="small"
-              type="primary"
-              @click="fetchData"
-            >
-              Retry
-            </a-button>
+            <a-button size="small" type="primary" @click="fetchData"> Retry </a-button>
           </template>
-        </Alert>
+        </a-alert>
       </div>
 
       <!-- Content -->
-      <div
-        v-else
-        class="space-y-16 animate-fade-in"
-      >
+      <div v-else class="space-y-16 animate-fade-in">
         <RecommendedTracks />
         <ExploreCourses />
       </div>

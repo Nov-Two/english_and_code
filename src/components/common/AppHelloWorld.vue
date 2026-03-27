@@ -8,7 +8,7 @@ const count = ref(0);
 </script>
 
 <template>
-  <section id="center">
+  <a-flex id="center" vertical align="center">
     <div class="hero">
       <img
         :src="heroImg"
@@ -32,17 +32,18 @@ const count = ref(0);
       <h1>Get started</h1>
       <p>Edit <code>src/App.vue</code> and save to test <code>HMR</code></p>
     </div>
-    <button
+    <a-button
+      type="primary"
       class="counter"
       @click="count++"
     >
       Count is {{ count }}
-    </button>
-  </section>
+    </a-button>
+  </a-flex>
 
   <div class="ticks" />
 
-  <section id="next-steps">
+  <a-flex id="next-steps">
     <div id="docs">
       <svg
         class="icon"
@@ -155,8 +156,8 @@ const count = ref(0);
         </li>
       </ul>
     </div>
-  </section>
+  </a-flex>
 
   <div class="ticks" />
-  <section id="spacer" />
+  <div id="spacer" />
 </template>

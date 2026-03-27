@@ -49,7 +49,7 @@ const props = withDefaults(defineProps<Props>(), {
   ],
 });
 
-const sectionRef = ref<HTMLElement | null>(null);
+const sectionRef = ref<any>(null);
 const isVisible = ref(false);
 const activeCardIndex = ref<number | null>(null);
 
@@ -73,7 +73,7 @@ onMounted(() => {
           isVisible.value = true;
           // Once visible, we can stop observing
           if (sectionRef.value) {
-            observer?.unobserve(sectionRef.value);
+            observer?.unobserve(sectionRef.value.$el || sectionRef.value);
           }
         }
       });
@@ -84,7 +84,7 @@ onMounted(() => {
   );
 
   if (sectionRef.value) {
-    observer.observe(sectionRef.value);
+    observer.observe(sectionRef.value.$el || sectionRef.value);
   }
 });
 
@@ -96,11 +96,12 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <section
+  <a-flex
     ref="sectionRef"
     class="w-full py-24 px-6 overflow-hidden"
+    justify="center"
   >
-    <div class="w-full max-w-[1200px] mx-auto">
+    <div class="w-full max-w-[1200px]">
       <!-- Section Header -->
       <div
         class="text-center mb-16 transition-all duration-700 ease-out"
@@ -120,23 +121,27 @@ onUnmounted(() => {
       </div>
 
       <!-- Features Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div
+      <a-row :gutter="[32, 32]">
+        <a-col
           v-for="(feature, index) in props.features"
           :key="index"
-          class="relative rounded-xl p-8 shadow-sm transition-all duration-[800ms] ease-out staggered-card cursor-pointer overflow-hidden border-2"
-          :class="[
-            isVisible ? 'visible' : 'hidden-state',
-            activeCardIndex === index
-              ? 'bg-[var(--theme-bg-main)] border-[var(--theme-primary)] dark:border-[var(--theme-blue-accent)] shadow-xl -translate-y-2'
-              : 'bg-[var(--theme-bg-main)] border-transparent dark:border-[var(--theme-border)] hover:shadow-lg hover:-translate-y-1 hover:border-[var(--theme-primary)]/30 dark:hover:border-[var(--theme-blue-accent)]/30',
-          ]"
-          :style="{
-            transitionDelay: `${index * 150}ms`,
-            willChange: 'transform, opacity',
-          }"
-          @click="handleCardClick(index)"
+          :xs="24"
+          :md="8"
         >
+          <div
+            class="h-full relative rounded-xl p-8 shadow-sm transition-all duration-[800ms] ease-out staggered-card cursor-pointer overflow-hidden border-2"
+            :class="[
+              isVisible ? 'visible' : 'hidden-state',
+              activeCardIndex === index
+                ? 'bg-[var(--theme-bg-main)] border-[var(--theme-primary)] dark:border-[var(--theme-blue-accent)] shadow-xl -translate-y-2'
+                : 'bg-[var(--theme-bg-main)] border-transparent dark:border-[var(--theme-border)] hover:shadow-lg hover:-translate-y-1 hover:border-[var(--theme-primary)]/30 dark:hover:border-[var(--theme-blue-accent)]/30',
+            ]"
+            :style="{
+              transitionDelay: `${index * 150}ms`,
+              willChange: 'transform, opacity',
+            }"
+            @click="handleCardClick(index)"
+          >
           <div
             class="mb-6 flex items-center justify-center w-12 h-12 rounded-lg transition-colors"
             :class="[feature.iconBgClass, feature.iconColorClass]"
@@ -231,10 +236,11 @@ onUnmounted(() => {
               />
             </div>
           </div>
-        </div>
-      </div>
+          </div>
+        </a-col>
+      </a-row>
     </div>
-  </section>
+  </a-flex>
 </template>
 
 <style scoped>

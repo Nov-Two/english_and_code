@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from 'vue';
 import type { HeroVisualProps, ContentData } from './types';
-import { Popover, Result, Button } from 'ant-design-vue';
 
 const props = withDefaults(defineProps<HeroVisualProps>(), {
   transitionDuration: 300,
@@ -88,7 +87,9 @@ watch(
     >
       <!-- Header -->
       <div class="pt-8 pb-4 px-6 text-left">
-        <p class="text-[10px] font-bold tracking-[0.15em] text-[var(--theme-text-muted)] uppercase mb-2 font-inter">
+        <p
+          class="text-[10px] font-bold tracking-[0.15em] text-[var(--theme-text-muted)] uppercase mb-2 font-inter"
+        >
           {{ moduleSubtitle }}
         </p>
         <h3 class="text-base font-bold text-[var(--theme-text-main)] font-space-grotesk">
@@ -98,18 +99,20 @@ watch(
 
       <!-- Custom Menu -->
       <nav class="flex-1 px-4 py-2 flex flex-col gap-1 relative z-10">
-        <button
+        <a-button
           v-for="item in navItems"
           :key="item.id"
-          class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] font-medium transition-all duration-300 relative text-left outline-none focus:ring-2 focus:ring-[var(--theme-primary)]/50"
+          type="text"
+          block
+          class="!flex items-center !justify-start gap-3 !px-4 !py-3 !h-auto !rounded-xl !text-[14px] !font-medium transition-all duration-300 relative outline-none focus:ring-2 focus:ring-[var(--theme-primary)]/50"
           :class="
             activeId === item.id
-              ? 'bg-[var(--theme-blue-muted)] text-[var(--theme-primary)] dark:text-[var(--theme-blue-accent)] shadow-sm dark:shadow-none'
-              : 'text-[var(--theme-text-secondary)] hover:bg-[var(--theme-bg-muted)] hover:text-[var(--theme-text-main)] dark:hover:bg-white/5'
+              ? '!bg-[var(--theme-blue-muted)] !text-[var(--theme-primary)] dark:!text-[var(--theme-blue-accent)] shadow-sm dark:shadow-none'
+              : '!text-[var(--theme-text-secondary)] hover:!bg-[var(--theme-bg-muted)] hover:!text-[var(--theme-text-main)] dark:hover:!bg-white/5'
           "
           @click="handleSelect(item.id)"
         >
-          <div
+          <span
             v-if="activeId === item.id"
             class="absolute right-0 top-1/2 -translate-y-1/2 w-[3px] h-8 bg-[var(--theme-primary)] dark:bg-[var(--theme-blue-accent)] rounded-l-full"
           />
@@ -123,8 +126,8 @@ watch(
                 : 'text-[var(--theme-text-muted)]'
             "
           />
-          {{ item.title }}
-        </button>
+          <span>{{ item.title }}</span>
+        </a-button>
       </nav>
 
       <!-- Progress -->
@@ -133,7 +136,9 @@ watch(
           class="bg-[var(--theme-bg-light)] dark:bg-[var(--theme-bg-main)] rounded-2xl p-4 border border-[var(--theme-border)] shadow-sm dark:shadow-none"
         >
           <div class="flex justify-between items-center mb-3">
-            <span class="text-[12px] font-semibold text-[var(--theme-text-secondary)] font-inter">Progress: {{ progress }}%</span>
+            <span class="text-[12px] font-semibold text-[var(--theme-text-secondary)] font-inter"
+              >Progress: {{ progress }}%</span
+            >
           </div>
           <div class="h-1.5 w-full bg-[var(--theme-border)] rounded-full overflow-hidden">
             <div
@@ -146,7 +151,9 @@ watch(
     </div>
 
     <!-- Content Area -->
-    <div class="flex-1 bg-[var(--theme-bg-main)] relative overflow-hidden flex flex-col p-8 md:p-12">
+    <div
+      class="flex-1 bg-[var(--theme-bg-main)] relative overflow-hidden flex flex-col p-8 md:p-12"
+    >
       <transition
         name="content-fade"
         mode="out-in"
@@ -171,20 +178,11 @@ watch(
           v-else-if="error"
           class="absolute inset-0 flex items-center justify-center bg-[var(--theme-bg-main)] z-20"
         >
-          <Result
-            status="error"
-            title="Failed to Load"
-            :sub-title="error.message"
-          >
+          <a-result status="error" title="Failed to Load" :sub-title="error.message">
             <template #extra>
-              <Button
-                type="primary"
-                @click="handleSelect(activeId)"
-              >
-                Retry
-              </Button>
+              <a-button type="primary" @click="handleSelect(activeId)"> Retry </a-button>
             </template>
-          </Result>
+          </a-result>
         </div>
 
         <!-- Content State -->
@@ -205,19 +203,18 @@ watch(
             </template>
             <template v-else-if="currentContent.tooltipWord">
               <span>Imagine a variable as a labeled </span>
-              <Popover
-                placement="top"
-                overlay-class-name="custom-tooltip"
-              >
+              <a-popover placement="top" overlay-class-name="custom-tooltip">
                 <template #content>
                   <div class="p-3 w-64">
                     <div class="flex justify-between items-center mb-2">
                       <span
                         class="text-[var(--theme-primary)] dark:text-[var(--theme-blue-accent)] font-bold font-space-grotesk text-base"
-                      >{{ currentContent.tooltipTitle }}</span>
+                        >{{ currentContent.tooltipTitle }}</span
+                      >
                       <span
                         class="bg-[var(--theme-brown-light)] text-[var(--theme-brown-accent)] text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider"
-                      >{{ currentContent.tooltipTag }}</span>
+                        >{{ currentContent.tooltipTag }}</span
+                      >
                     </div>
                     <p class="text-sm text-[var(--theme-text-secondary)] m-0 leading-relaxed">
                       {{ currentContent.tooltipDescription }}
@@ -229,9 +226,11 @@ watch(
                 >
                   {{ currentContent.tooltipWord }}
                 </span>
-              </Popover>
-              <span>. You can store information inside it and give it a name so you can find it
-                later.</span>
+              </a-popover>
+              <span
+                >. You can store information inside it and give it a name so you can find it
+                later.</span
+              >
             </template>
           </div>
 
@@ -261,38 +260,21 @@ watch(
                   :key="index"
                   class="mb-2 last:mb-0"
                 >
-                  <div
-                    v-if="snippet.comment"
-                    class="text-[#64748B] italic mb-1"
-                  >
+                  <div v-if="snippet.comment" class="text-[#64748B] italic mb-1">
                     {{ snippet.comment }}
                   </div>
-                  <div
-                    v-if="snippet.rawLine"
-                    class="text-gray-300"
-                    v-html="snippet.rawLine"
-                  />
-                  <div
-                    v-else-if="snippet.key !== undefined"
-                    class="flex items-center"
-                  >
+                  <div v-if="snippet.rawLine" class="text-gray-300" v-html="snippet.rawLine" />
+                  <div v-else-if="snippet.key !== undefined" class="flex items-center">
                     <span class="text-[#818CF8]">{{ snippet.key }}</span>
                     <span class="text-gray-400 mx-2">=</span>
-                    <span
-                      v-if="snippet.isString"
-                      class="text-[#34D399]"
-                    >"{{ snippet.value }}"</span>
-                    <span
-                      v-else
-                      class="text-[#34D399]"
-                    >{{ snippet.value }}</span>
+                    <span v-if="snippet.isString" class="text-[#34D399]"
+                      >"{{ snippet.value }}"</span
+                    >
+                    <span v-else class="text-[#34D399]">{{ snippet.value }}</span>
                   </div>
                 </div>
               </template>
-              <pre
-                v-else-if="currentContent.rawCode"
-                class="text-gray-300 m-0 p-0 overflow-x-auto"
-              >
+              <pre v-else-if="currentContent.rawCode" class="text-gray-300 m-0 p-0 overflow-x-auto">
                 <code v-html="currentContent.rawCode" />
               </pre>
             </div>
@@ -317,7 +299,9 @@ watch(
                   d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
               </svg>
-              <span class="text-[var(--theme-green-text)] font-semibold text-sm">Preview: Output</span>
+              <span class="text-[var(--theme-green-text)] font-semibold text-sm"
+                >Preview: Output</span
+              >
             </div>
             <span class="font-mono text-[var(--theme-green-text)] font-medium text-sm">{{
               currentContent.previewOutput
